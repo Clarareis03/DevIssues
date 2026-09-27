@@ -50,6 +50,17 @@ def calcular_sentimento_por_lemmas(lemmas: List[str]) -> str:
     return "Neutro"
 
 
+import re  
+
+def _tokenizar_labels(labels_str: str) -> set:
+    """Quebra a string de labels em tokens individuais para evitar
+    falsos positivos de correspondência por substring
+    (ex.: 'bug' sendo encontrado dentro de 'debug' ou 'debugging')."""
+    labels_str = str(labels_str).lower()
+    tokens = re.split(r"[;,\s\-_/]+", labels_str)
+    return {t for t in tokens if t}
+
+
 def identificar_categorias(
     issue_dict: Dict[str, Any],
     res_regex: Dict[str, List[str]],
@@ -59,32 +70,32 @@ def identificar_categorias(
 
     padrões Regex e os lemas extraídos pelo spaCy.
     """
-    labels = str(issue_dict.get("labels", "")).lower()
+    labels_tokens = _tokenizar_labels(issue_dict.get("labels", ""))
     lemmas_set = {str(l).lower() for l in lemmas}
 
     # 1. Identificação de Bug
     eh_bug = (
         bool(res_regex.get("erros"))
-        or any(b in labels for b in ["bug", "defect", "erro"])
+        or bool(labels_tokens.intersection({"bug", "defect", "erro"}))
         or bool(lemmas_set.intersection({"bug", "error", "exception", "crash", "fix"}))
     )
 
     # 2. Identificação de Dívida Técnica
     eh_divida = (
-        any(d in labels for d in ["debt", "refactor", "cleanup", "deprecation"])
+        bool(labels_tokens.intersection({"debt", "refactor", "cleanup", "deprecation"}))
         or bool(lemmas_set.intersection({"refactor", "clean", "deprecated", "todo", "cleanup"}))
     )
 
     # 3. Identificação de Feature Request
     eh_feature = (
-        any(f in labels for f in ["enhancement", "feature", "request"])
+        bool(labels_tokens.intersection({"enhancement", "feature", "request"}))
         or bool(lemmas_set.intersection({"feature", "request", "add", "support", "implement", "proposal"}))
     )
 
     # 4. Identificação de Urgência
     eh_urgente = (
         bool(res_regex.get("urgencia"))
-        or any(u in labels for u in ["urgent", "critical", "p0", "p1", "blocker"])
+        or bool(labels_tokens.intersection({"urgent", "critical", "p0", "p1", "blocker"}))
     )
 
     return {
