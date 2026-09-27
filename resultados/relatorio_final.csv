@@ -1,0 +1,51 @@
+﻿repositorio,numero,titulo,estado,idioma,bug,divida_tecnica,feature_request,urgencia,sentimento,erros_encontrados,versoes_encontradas,urgencia_termos,qtd_tokens,qtd_entidades,url
+pallets/flask,6165,update docs for `MAX_CONTENT_LENGTH`,closed,en,SIM,NÃO,SIM,NÃO,Negativo,WinError,3.13.7; 3.1.3,,239,12,https://github.com/pallets/flask/issues/6165
+pallets/flask,6161,spam,closed,en,SIM,NÃO,NÃO,NÃO,Positivo,,,,44,2,https://github.com/pallets/flask/issues/6161
+pallets/flask,6160,spam,closed,en,NÃO,NÃO,NÃO,NÃO,Neutro,,,,2,0,https://github.com/pallets/flask/issues/6160
+pallets/flask,6146,Add Cloudflare to Flask Hosting Platforms docs?,open,en,NÃO,NÃO,SIM,NÃO,Neutro,,,,46,5,https://github.com/pallets/flask/issues/6146
+pallets/flask,6143,`add_url_rule` leaves a route registered even after an endpoint conflict,closed,en,SIM,NÃO,SIM,NÃO,Negativo,AssertionError,3.11.2; 3.1.3,,269,19,https://github.com/pallets/flask/issues/6143
+pallets/flask,6139,AI junk,closed,en,SIM,NÃO,SIM,SIM,Positivo,,,CRITICAL,300,16,https://github.com/pallets/flask/issues/6139
+pallets/flask,6126,AI junk,closed,en,SIM,NÃO,NÃO,SIM,Negativo,,,critical,87,3,https://github.com/pallets/flask/issues/6126
+pallets/flask,6123,`stream_with_context`: abandoned generator leaves the app context current on the worker thread; later requests skip `teardown_appcontext`,closed,en,SIM,NÃO,SIM,NÃO,Negativo,LookupError; ValueError,3.1.2; 3.1.3; 3.13; 3.11; 3.2-dev,,920,34,https://github.com/pallets/flask/issues/6123
+pallets/flask,6122,Add async view pattern guide with Quart migration,closed,en,NÃO,NÃO,SIM,NÃO,Neutro,,,,24,1,https://github.com/pallets/flask/issues/6122
+pallets/flask,6120,Update tests for Werkzeug deprecated header parsing helpers,closed,en,SIM,NÃO,NÃO,NÃO,Negativo,,,,126,9,https://github.com/pallets/flask/issues/6120
+pallets/flask,6119,AI junk,closed,en,SIM,NÃO,SIM,NÃO,Negativo,TypeError,3.2.0; 3.13.13,,442,15,https://github.com/pallets/flask/issues/6119
+pallets/flask,6114,"jsonify emits NaN and Infinity, which are not valid JSON",closed,en,SIM,NÃO,NÃO,NÃO,Negativo,ValueError,3.14; 3.1.3; 3.1.8,,558,15,https://github.com/pallets/flask/issues/6114
+pallets/flask,6107,Confusing docstring in Flask.get_send_file_max_age and Flask.send_static_file,closed,en,SIM,NÃO,NÃO,NÃO,Negativo,,,,213,7,https://github.com/pallets/flask/issues/6107
+pallets/flask,6093,"IPv6 addresses parsed incorrectly because of `.partition("":"")`?",closed,en,NÃO,NÃO,SIM,NÃO,Negativo,,,,199,16,https://github.com/pallets/flask/issues/6093
+pallets/flask,6092,test_bad_environ_raises_bad_request fails with Werkzeug>=3.1.7,closed,en,SIM,NÃO,NÃO,NÃO,Negativo,AssertionError,3.1.7; 3.14.6; 3.1.3,,211,10,https://github.com/pallets/flask/issues/6092
+pallets/flask,6071,Tests fail with pytest 9.1: _pytest.monkeypatch.notset removed,closed,en,SIM,NÃO,NÃO,NÃO,Negativo,ImportError; AttributeError,9.1; 9.1+.; 3.15.0; 3.1.3,,177,15,https://github.com/pallets/flask/issues/6071
+pallets/flask,6068,Flask logging not working as expected,closed,en,NÃO,NÃO,SIM,NÃO,Positivo,,3.11; 3.1.3,,261,7,https://github.com/pallets/flask/issues/6068
+pallets/flask,6065,Add a query() route shortcut and MethodView support for HTTP QUERY (RFC 10008),closed,en,NÃO,NÃO,SIM,NÃO,Neutro,,,,261,17,https://github.com/pallets/flask/issues/6065
+pallets/flask,6059,AI spam,closed,en,NÃO,SIM,NÃO,NÃO,Negativo,,3.8; 2.5,,228,14,https://github.com/pallets/flask/issues/6059
+pallets/flask,6057,Dead Code Audit — 65 potentially unused functions,closed,en,NÃO,NÃO,SIM,NÃO,Neutro,,,,388,29,https://github.com/pallets/flask/issues/6057
+pallets/flask,6056,Dependency Audit — check for outdated packages,closed,en,NÃO,NÃO,NÃO,NÃO,Neutro,,v5.3.1; v5.0.1; v4.2.4; v1.9.0; v5.6.3; 24.1.0; 25.1.0; 3.13.5; 3.14.1; 1.0.8; 1.0.9; 7.8.3; 7.8.4; 0.107.1; 0.109.1; 21.0.0; 25.0.0; 4.5.56; 4.5.58; 8.1.8; 8.4.1; 46.0.7; 48.0.1; 0.3.11; 0.4.1; 4.17.0; 4.18.0; 0.8.1; 0.9.1; 1.2.2; 1.3.1; 3.29.1; 3.29.3; 1.18.0; 1.19.0; 8.7.1; 9.0.0; 4.25.1; 4.26.0; 1.4.4; 1.4.6; 1.0.7; 1.4.2; 1.3.0; 0.8.11; 0.8.15; 0.44.0; 0.47.0; 1.23.3; 1.27.2; 1.1.0; 0.61.2; 0.65.1; 2.2.6; 2.4.6; 2.41.0; 2.41.1; 1.37.0; 1.42.1; 2.3.3; 3.0.3; 3.19.0; 4.0.7; 2.49.8; 2.49.11; 6.33.6; 7.35.1; 2.46.4; 2.47.0; 1.8.0; 1.9.0; 1.2.1; 8.5.0; 9.1.4; 4.67.3; 4.68.2; 0.25.1; 0.26.7; 15.0.1; 1.17.3; 2.2.1; 0.1.9; 0.2.0; 2026.3.17; 2026.6.9,,441,90,https://github.com/pallets/flask/issues/6056
+pallets/flask,6055,Dependency Health Check,closed,en,NÃO,NÃO,NÃO,NÃO,Neutro,,v5.3.1; v5.0.1; v4.2.4; v1.9.0; v5.6.3,,19,3,https://github.com/pallets/flask/issues/6055
+pallets/flask,6054,register_blueprint name override bypasses dot validation,closed,en,SIM,NÃO,NÃO,NÃO,Negativo,ValueError,,,202,6,https://github.com/pallets/flask/issues/6054
+pallets/flask,6051,AI Junk,closed,en,NÃO,NÃO,NÃO,NÃO,Neutro,,,,5,1,https://github.com/pallets/flask/issues/6051
+pallets/flask,6050,AI Junk,closed,en,NÃO,NÃO,NÃO,NÃO,Neutro,,,,5,1,https://github.com/pallets/flask/issues/6050
+pallets/flask,6049,AI Junk,closed,en,NÃO,NÃO,NÃO,NÃO,Neutro,,,,5,1,https://github.com/pallets/flask/issues/6049
+pallets/flask,6048,AI Junk,closed,en,NÃO,NÃO,NÃO,NÃO,Neutro,,,,5,1,https://github.com/pallets/flask/issues/6048
+pallets/flask,6047,AI Junk,closed,en,NÃO,NÃO,NÃO,NÃO,Neutro,,,,5,1,https://github.com/pallets/flask/issues/6047
+pallets/flask,6044,multiple teardown errors are discarded on Python < 3.11,closed,en,SIM,NÃO,NÃO,NÃO,Negativo,RuntimeError; ValueError,3.11,,358,21,https://github.com/pallets/flask/issues/6044
+pallets/flask,6042,AI spam,closed,en,NÃO,NÃO,NÃO,NÃO,Neutro,,,,3,1,https://github.com/pallets/flask/issues/6042
+pallets/flask,6031,API doc references are not sorted,closed,en,NÃO,NÃO,NÃO,NÃO,Negativo,,,,79,3,https://github.com/pallets/flask/issues/6031
+pallets/flask,6025,FLASK_DEBUG env variable no longer works as of click 8.4.0,closed,en,SIM,NÃO,NÃO,NÃO,Negativo,,8.3.3; 3.12.3; 3.1.3,,180,12,https://github.com/pallets/flask/issues/6025
+pallets/flask,6023,Config.from_file() silently ignores fewer OSError codes than from_pyfile(),closed,en,SIM,NÃO,SIM,NÃO,Negativo,OSError,,,379,13,https://github.com/pallets/flask/issues/6023
+pallets/flask,6002,Missing tests: 9 source files have no test coverage,closed,en,NÃO,NÃO,NÃO,NÃO,Neutro,,,,151,7,https://github.com/pallets/flask/issues/6002
+pallets/flask,6001,Missing tests: 9 source files have no test coverage,closed,en,NÃO,NÃO,NÃO,NÃO,Neutro,,,,151,7,https://github.com/pallets/flask/issues/6001
+pallets/flask,6000,Missing tests: 9 source files have no test coverage,closed,en,NÃO,NÃO,NÃO,NÃO,Neutro,,,,151,7,https://github.com/pallets/flask/issues/6000
+pallets/flask,5999,Missing tests: 9 source files have no test coverage,closed,en,NÃO,NÃO,NÃO,NÃO,Neutro,,,,151,7,https://github.com/pallets/flask/issues/5999
+pallets/flask,5993,<spam>,closed,en,NÃO,NÃO,NÃO,NÃO,Neutro,,,,5,0,https://github.com/pallets/flask/issues/5993
+pallets/flask,5991,<spam>,closed,en,NÃO,NÃO,NÃO,NÃO,Neutro,,,,7,1,https://github.com/pallets/flask/issues/5991
+pallets/flask,5988,"Docs: doubled word ""the the"" in TESTING config description",closed,en,SIM,NÃO,NÃO,NÃO,Negativo,,,,84,2,https://github.com/pallets/flask/issues/5988
+pallets/flask,5986,<spam>,closed,en,NÃO,NÃO,SIM,NÃO,Positivo,,,,152,4,https://github.com/pallets/flask/issues/5986
+pallets/flask,5972,<spam>,closed,en,SIM,NÃO,NÃO,NÃO,Positivo,,3.1.2; 3.1.6; 3.1.5,,767,51,https://github.com/pallets/flask/issues/5972
+pallets/flask,5965,fix: celery task result endpoint crashes on task failure,closed,en,SIM,NÃO,NÃO,NÃO,Negativo,TypeError,,,158,6,https://github.com/pallets/flask/issues/5965
+pallets/flask,5961,Flask 3.1.3 test (`test_environ_for_valid_idna_completes`) breaks after Werkzeug update from 3.1.6 to 3.1.7,closed,en,SIM,NÃO,NÃO,NÃO,Negativo,AssertionError,3.1.3; 3.1.6; 3.1.7; 3.13.12,,345,20,https://github.com/pallets/flask/issues/5961
+pallets/flask,5948,docs: Missing Redis setup instructions in Celery example README,closed,en,SIM,NÃO,SIM,NÃO,Negativo,,5.6.2,,313,17,https://github.com/pallets/flask/issues/5948
+pallets/flask,5942,flask run should support pep723,closed,en,NÃO,NÃO,SIM,NÃO,Neutro,,,,98,4,https://github.com/pallets/flask/issues/5942
+pallets/flask,5936,Clarify recommended debug workflow in Quickstart documentation,closed,en,NÃO,NÃO,NÃO,NÃO,Positivo,,,,123,7,https://github.com/pallets/flask/issues/5936
+pallets/flask,5934,"[Security] Default session HMAC digest should be SHA-256, not SHA-1",closed,en,NÃO,NÃO,NÃO,NÃO,Neutro,,,,74,8,https://github.com/pallets/flask/issues/5934
+pallets/flask,5933,Add a built-in is_safe_redirect() helper to handle browser URL normalization (backslash → forward slash),closed,en,SIM,NÃO,SIM,NÃO,Negativo,,,,397,16,https://github.com/pallets/flask/issues/5933
+pallets/flask,5932,Add configurable JSON parsing limits and preprocessing hook,closed,en,NÃO,NÃO,SIM,NÃO,Positivo,,,,204,11,https://github.com/pallets/flask/issues/5932

@@ -1,27 +1,26 @@
 """
-DevIssues - main.py
-
-Ponto de entrada do projeto. Por enquanto, só aciona a coleta de issues
-(src/coleta.py). Conforme os outros componentes (Regex, spaCy, análise,
-interface) forem ficando prontos, dá pra chamá-los aqui também.
+DevIssues — main.py
+Ponto de entrada principal da aplicação.
 """
 
-from src.coleta import coletar_issues_de_varios_repositorios, salvar_em_csv
+import sys
+from pathlib import Path
 
-# ------------------------------------------------------------------
-# Repositórios e quantidades definidos pelo grupo.
-# Se quiser mudar depois, é só editar aqui.
-# ------------------------------------------------------------------
-REPOSITORIOS = ["psf/requests", "pandas-dev/pandas", "microsoft/vscode", "filipedeschamps/tabnews.com.br"]
-QUANTIDADE_POR_REPO = [70, 70, 70, 70]  # total: 280 issues
-ARQUIVO_SAIDA = "dados/issues.csv"
+# Adiciona o diretório raiz do projeto ao sys.path para garantir
+# que as importações do pacote 'src' funcionem de forma consistente
+DIRETORIO_RAIZ = Path(__file__).resolve().parent
+if str(DIRETORIO_RAIZ) not in sys.path:
+    sys.path.insert(0, str(DIRETORIO_RAIZ))
 
+# Garante a criação das pastas do projeto
+(DIRETORIO_RAIZ / "dados").mkdir(exist_ok=True)
+(DIRETORIO_RAIZ / "resultados").mkdir(exist_ok=True)
 
-def main() -> None:
-    print(f"Coletando issues de {len(REPOSITORIOS)} repositório(s)...")
-    issues = coletar_issues_de_varios_repositorios(REPOSITORIOS, QUANTIDADE_POR_REPO)
-    salvar_em_csv(issues, ARQUIVO_SAIDA)
-
+from src.interface import executar_menu
 
 if __name__ == "__main__":
-    main()
+    try:
+        executar_menu()
+    except KeyboardInterrupt:
+        print("\n\n[!] Execução interrompida pelo utilizador. Até breve!")
+        sys.exit(0)
