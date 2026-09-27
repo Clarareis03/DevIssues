@@ -76,7 +76,7 @@ def menu_coleta() -> None:
     choice = input(f"\n{BOLD}Escolha uma opção:> {RESET}").strip()
 
     if choice == "1":
-        lista_repos = ["pallets/flask", "psf/requests", "fastapi/fastapi"]
+        lista_repos = ["psf/requests","pandas-dev/pandas","microsoft/vscode","filipedeschamps/tabnews.com.br",]
     elif choice == "2":
         repos_input = input(
             f"\n{BOLD}Digite os repositórios (ex: owner/repo1, owner/repo2):> {RESET}"

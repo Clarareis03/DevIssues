@@ -108,10 +108,10 @@ st.markdown(
 # Cartões de Métricas
 m1, m2, m3, m4, m5 = st.columns(5)
 m1.metric("Total de Issues", total)
-m2.metric("🐛 Bugs / Erros", f"{bugs}", f"{(bugs/total)*100:.1f}%")
-m3.metric("🛠️ Dívida Técnica", f"{divida}", f"{(divida/total)*100:.1f}%")
-m4.metric("💡 Feature Requests", f"{feature}", f"{(feature/total)*100:.1f}%")
-m5.metric("🚨 Urgentes", f"{urgente}", f"{(urgente/total)*100:.1f}%")
+m2.metric(" Bugs / Erros", f"{bugs}", f"{(bugs/total)*100:.1f}%")
+m3.metric(" Dívida Técnica", f"{divida}", f"{(divida/total)*100:.1f}%")
+m4.metric(" Feature Requests", f"{feature}", f"{(feature/total)*100:.1f}%")
+m5.metric(" Urgentes", f"{urgente}", f"{(urgente/total)*100:.1f}%")
 
 st.write("")
 
@@ -183,7 +183,7 @@ st.plotly_chart(estilizar(fig_repo, altura=380), use_container_width=True)
 
 # Explorador de Tabela com Filtros
 st.write("")
-st.subheader("🔎 Explorar Base de Dados Processada")
+st.subheader(" Explorar Base de Dados Processada")
 
 f_col1, f_col2 = st.columns(2)
 with f_col1:
@@ -234,22 +234,22 @@ st.divider()
 # ---------------------------------------------------------
 st.header("⚙️ 2. Arquitetura e Metodologia do Projeto")
 st.markdown(
-    "Abaixo está detalhada a pipeline de processamento desenvolvida por cada integrante da equipa."
+    "Abaixo está detalhada a pipeline de processamento desenvolvida por cada integrante da equipe."
 )
 
 tab_coleta, tab_regex, tab_spacy, tab_integracao = st.tabs(
     [
-        "📥 1. Coleta de Dados (Pessoa 1)",
-        "🎯 2. Expressões Regulares (Pessoa 2)",
-        "🧠 3. Processamento NLP / spaCy (Pessoa 2)",
-        "📊 4. Consolidação & Regras (Pessoa 3)",
+        " 1. Coleta de Dados (Pessoa 1)",
+        " 2. Expressões Regulares (Pessoa 2)",
+        " 3. Processamento NLP / spaCy (Pessoa 2)",
+        " 4. Consolidação & Regras (Pessoa 3)",
     ]
 )
 
 with tab_coleta:
     st.markdown("""
-    ### 📥 Coleta de Dados via REST API do GitHub
-    - **Fonte dos Dados:** Repositórios públicos do GitHub (ex: *pallets/flask*, *psf/requests*, *fastapi/fastapi*).
+    ###  Coleta de Dados via REST API do GitHub
+    - **Fonte dos Dados:** Repositórios públicos do GitHub .
     - **Endpoint:** `GET /repos/{owner}/{repo}/issues`.
     - **Campos Extraídos:** Número da issue, título, corpo da descrição (*body*), labels originais, estado (*open/closed*), datas de criação/fecho e URL.
     - **Tratamento:** Filtro de paginação para contornar limites da API e exportação limpa em formato CSV em `dados/issues.csv`.
