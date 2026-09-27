@@ -2,15 +2,7 @@
 
 Análise linguística de relatos de problemas em projetos de código aberto: como desenvolvedores descrevem bugs, dívida técnica, pedidos de funcionalidade e urgência nas issues do GitHub.
 
-Projeto desenvolvido para a 1ª etapa da disciplina de Processamento de Linguagem Natural e Engenharia de Software, usando **Expressões Regulares** e **spaCy** sobre um corpus real de **280 issues** coletadas pela GitHub REST API.
-
-> **#6165** — `update docs for MAX_CONTENT_LENGTH`
-> "I have this Flask app with... the app kept receiving and writing the request to disk way over 10 bytes..."
-> - Bug: NÃO · Feature request: SIM · Urgência: NÃO
->
-> **#6139** — `AI junk`
-> "Multiple security vulnerabilities in Flask: CRITICAL code execution via exec()..."
-> - Bug: SIM · Urgência: SIM · Dívida técnica: NÃO
+Projeto desenvolvido para a 1ª etapa da disciplina de Modelagem de Dados não Estruturados, usando **Expressões Regulares** e **spaCy** sobre um corpus real de **280 issues** coletadas pela GitHub REST API.
 
 ## Sumário
 
@@ -50,13 +42,12 @@ Coleta feita pela **GitHub REST API** (`GET /repos/{owner}/{repo}/issues`), sem 
 
 | Repositório | Idioma predominante |
 | --- | --- |
-| `pallets/flask` | Inglês |
 | `psf/requests` | Inglês |
 | `pandas-dev/pandas` | Inglês |
 | `microsoft/vscode` | Inglês |
 | `filipedeschamps/tabnews.com.br` | Português |
 
-**Corpus final: 280 issues** (`dados/issues.csv`), sendo **210 em inglês** e **70 em português** — um corpus bilíngue processado com dois modelos spaCy diferentes (`en_core_web_sm` e `pt_core_news_sm`), escolhidos automaticamente por issue a partir de uma detecção simples de idioma.
+**Corpus final: 280 issues** (`dados/issues.csv`), com **70 issues de cada um dos 4 repositórios**: 210 em inglês e 70 em português — um corpus bilíngue processado com dois modelos spaCy diferentes (`en_core_web_sm` e `pt_core_news_sm`), escolhidos automaticamente por issue a partir de uma detecção simples de idioma.
 
 ## Categorias identificadas
 
@@ -149,7 +140,7 @@ GITHUB_TOKEN=seu_token_aqui
 ### 3. Rodar a coleta (opcional — o corpus de 280 issues já está em `dados/issues.csv`)
 
 ```bash
-python -m src.coleta --repos pallets/flask,psf/requests,pandas-dev/pandas,microsoft/vscode,filipedeschamps/tabnews.com.br --max-por-repo 56
+python -m src.coleta --repos psf/requests,pandas-dev/pandas,microsoft/vscode,filipedeschamps/tabnews.com.br --max-por-repo 70
 ```
 
 ### 4. Rodar a análise completa
@@ -221,7 +212,7 @@ Para categorias e recortes adicionais (feature request, distribuição de sentim
 1. O projeto analisa **textos de issues**, não a qualidade real do código nem o desempenho dos desenvolvedores.
 2. A análise de sentimento é automática e baseada em lista de lemas — pode errar, especialmente com sarcasmo ou gírias técnicas.
 3. Encontrar termos como "urgent" ou "critical" não significa que o problema era, de fato, grave — pode ser só o jeito de quem escreveu.
-4. A amostra depende dos cinco repositórios escolhidos, que têm culturas de comunicação diferentes (inclusive volume relevante de spam/conteúdo gerado por IA em alguns deles, como no `pallets/flask`).
+4. A amostra depende dos quatro repositórios escolhidos, que têm culturas de comunicação diferentes (inclusive volume relevante de spam/conteúdo gerado por IA em alguns deles, como no `psf/requests`).
 5. Não devemos generalizar os resultados para todo o ecossistema open source.
 6. A detecção de idioma usa uma heurística simples baseada em listas de palavras-chave; casos ambíguos são classificados por padrão como inglês.
 7. A 1ª etapa é exclusivamente textual.
