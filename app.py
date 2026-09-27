@@ -5,6 +5,7 @@ DevIssues — Dashboard & Metodologia Técnica (Página Única)
 import os
 from pathlib import Path
 import pandas as pd
+import plotly.express as px
 import streamlit as st
 
 # Tenta importar a análise para processar em memória caso o relatório final ainda não exita
@@ -19,6 +20,29 @@ st.set_page_config(
     page_icon="🔍",
     layout="wide",
 )
+
+# Cores fixas para as categorias, usadas em todos os gráficos Plotly
+CORES_SENTIMENTO = {"Positivo": "#22c55e", "Neutro": "#facc15", "Negativo": "#ef4444"}
+CORES_CATEGORIA = {
+    "Bugs": "#ef4444",
+    "Dívida Técnica": "#f59e0b",
+    "Feature Requests": "#3b82f6",
+    "Urgência": "#a855f7",
+}
+
+
+def estilizar(fig, altura=340):
+    """Aplica um visual consistente e transparente aos gráficos Plotly,
+    para se encaixarem bem no tema escuro do dashboard."""
+    fig.update_layout(
+        height=altura,
+        margin=dict(l=10, r=10, t=40, b=10),
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
+        font_color="#f2f2f2",
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+    )
+    return fig
 
 
 @st.cache_data
@@ -67,6 +91,19 @@ bugs = len(df[df["bug"] == "SIM"])
 divida = len(df[df["divida_tecnica"] == "SIM"])
 feature = len(df[df["feature_request"] == "SIM"])
 urgente = len(df[df["urgencia"] == "SIM"])
+n_repos = df["repositorio"].nunique()
+
+# Faixa de destaque com os números-chave, antes das métricas detalhadas
+st.markdown(
+    f"""
+    <div style="background:#1c1f26;border-radius:0.8rem;padding:1rem 1.5rem;margin-bottom:1rem;">
+        <span style="font-size:1.4rem;font-weight:700;color:#f2f2f2;">
+            {total} issues analisadas em {n_repos} repositórios · {urgente} marcadas como urgentes
+        </span>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
 
 # Cartões de Métricas
 m1, m2, m3, m4, m5 = st.columns(5)
@@ -78,28 +115,71 @@ m5.metric("🚨 Urgentes", f"{urgente}", f"{(urgente/total)*100:.1f}%")
 
 st.write("")
 
-# Gráficos Visuais
+# Gráficos Visuais (Plotly, no lugar do st.bar_chart padrão)
 col_g1, col_g2 = st.columns(2)
 
 with col_g1:
     st.subheader("Análise de Sentimento (Lemas spaCy)")
-    sent_counts = df["sentimento"].value_counts()
-    st.bar_chart(sent_counts, color="#1f77b4")
+    sent_df = df["sentimento"].value_counts().reset_index()
+    sent_df.columns = ["Sentimento", "Quantidade"]
+    fig_sent = px.pie(
+        sent_df,
+        values="Quantidade",
+        names="Sentimento",
+        color="Sentimento",
+        color_discrete_map=CORES_SENTIMENTO,
+        hole=0.45,
+    )
+    st.plotly_chart(estilizar(fig_sent), use_container_width=True)
 
 with col_g2:
     st.subheader("Distribuição por Categoria")
     cats_df = pd.DataFrame(
         {
-            "Categoria": [
-                "Bugs",
-                "Dívida Técnica",
-                "Feature Requests",
-                "Urgência",
-            ],
+            "Categoria": ["Bugs", "Dívida Técnica", "Feature Requests", "Urgência"],
             "Quantidade": [bugs, divida, feature, urgente],
         }
-    ).set_index("Categoria")
-    st.bar_chart(cats_df, color="#2ca02c")
+    )
+    fig_cats = px.bar(
+        cats_df,
+        x="Categoria",
+        y="Quantidade",
+        color="Categoria",
+        color_discrete_map=CORES_CATEGORIA,
+        text="Quantidade",
+    )
+    fig_cats.update_traces(textposition="outside")
+    fig_cats.update_layout(showlegend=False)
+    st.plotly_chart(estilizar(fig_cats), use_container_width=True)
+
+# Comparativo entre repositórios
+st.subheader("🗂️ Comparativo por Repositório")
+
+comparativo = (
+    df.groupby("repositorio")
+    .agg(
+        Bugs=("bug", lambda s: (s == "SIM").sum()),
+        **{"Dívida Técnica": ("divida_tecnica", lambda s: (s == "SIM").sum())},
+        **{"Feature Requests": ("feature_request", lambda s: (s == "SIM").sum())},
+        Urgência=("urgencia", lambda s: (s == "SIM").sum()),
+    )
+    .reset_index()
+)
+
+comparativo_longo = comparativo.melt(
+    id_vars="repositorio", var_name="Categoria", value_name="Quantidade"
+)
+
+fig_repo = px.bar(
+    comparativo_longo,
+    x="repositorio",
+    y="Quantidade",
+    color="Categoria",
+    barmode="group",
+    color_discrete_map=CORES_CATEGORIA,
+)
+fig_repo.update_layout(xaxis_title="", legend_title="")
+st.plotly_chart(estilizar(fig_repo, altura=380), use_container_width=True)
 
 # Explorador de Tabela com Filtros
 st.write("")
@@ -179,10 +259,10 @@ with tab_regex:
     st.markdown("""
     ### 🎯 Expressões Regulares (Regex)
     O módulo `src/regex.py` aplica padrões regex específicos sobre o texto combinado (*Título + Corpo*) de cada issue para capturar metadados técnicos:
-    
-    1. **Erros e Exceções:** Padrões para capturar exceções da linguagem (ex: `\b[A-Z][a-zA-Z0-9]*(?:Error|Exception)\b`).
-    2. **Versões de Software:** Captura de padrões como `v1.2.3`, `Python 3.10` ou `v2.0-beta`.
-    3. **Termos de Urgência:** Expressões como `urgent`, `critical`, `blocker`, `p0`, `asap`.
+
+    1. **Erros e Exceções:** Padrões para capturar exceções da linguagem (ex: `\\b[A-Za-z_]\\w*(?:Error|Exception)\\b`).
+    2. **Versões de Software:** Captura de padrões como `v1.2.3`, `Python 3.10` ou `v2.0-beta`, com filtros de contexto para evitar confundir com IPs, percentuais e métricas.
+    3. **Termos de Urgência:** Expressões como `urgent`, `critical`, `blocker`, `asap`.
     4. **Caminhos de Ficheiros e URLs:** Identificação de referências de código e links para relatórios externos.
     """)
 
@@ -190,8 +270,8 @@ with tab_spacy:
     st.markdown("""
     ### 🧠 Processamento de Linguagem Natural (spaCy)
     O módulo `src/nlp.py` utiliza os modelos de linguagem `en_core_web_sm` (Inglês) e `pt_core_news_sm` (Português) para realizar:
-    
-    - **Lematização:** Redução de palavras à sua forma base (ex: *buggy*, *bugs* $\rightarrow$ `bug`; *failed*, *failing* $\rightarrow$ `fail`).
+
+    - **Lematização:** Redução de palavras à sua forma base (ex: *buggy*, *bugs* $\\rightarrow$ `bug`; *failed*, *failing* $\\rightarrow$ `fail`).
     - **Filtragem de Stopwords & Pontuação:** Remoção de termos ruído para focar apenas em tokens com valor semântico.
     - **Detecção de Entidades (NER):** Identificação automática de organizações, datas e nomes mencionados no texto.
     """)
@@ -200,7 +280,7 @@ with tab_integracao:
     st.markdown("""
     ### 📊 Regras de Classificação e Sentimento
     O módulo `src/analise.py` consome os retornos do Regex e do spaCy para tomar as decisões finais:
-    
+
     - **Classificação de Categorias:** Combinando labels do GitHub, capturas de Regex e lemas do spaCy para marcar flags de **Bug**, **Dívida Técnica**, **Feature Request** e **Urgência**.
     - **Análise de Sentimento:** Baseada na contagem e polaridade dos lemas extraídos pelo spaCy (comparação entre lemas de satisfação e lemas de frustração/falha).
     - **Relatório Consolidado:** Geração automática do ficheiro `resultados/relatorio_final.csv`.
