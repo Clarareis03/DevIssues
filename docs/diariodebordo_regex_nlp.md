@@ -96,7 +96,7 @@ Foram analisados os textos das issues procurando termos que indicassem explicita
 
 Foi criado um padrão específico para termos como `urgent`, `urgently`, `critical`, `asap`, `blocking`, `blocked`, `high priority`, `release blocker` e `blocker`.
 
-Após a execução sobre as 280 issues, foram encontradas **4 issues com indicação explícita de urgência**, correspondendo a **1,4% do corpus**.
+Após a execução sobre as 280 issues, foram encontradas **6 issues com indicação explícita de urgência**, correspondendo a **2,1% do corpus**.
 
 **O que aprendemos:**
 
