@@ -8,3 +8,6 @@ scikit-learn
 matplotlib
 numpy
 plotly
+transformers
+torch
+sentencepiece
