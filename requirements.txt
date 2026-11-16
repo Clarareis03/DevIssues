@@ -3,3 +3,8 @@ pandas
 requests
 python-dotenv
 streamlit
+sentence-transformers
+scikit-learn
+matplotlib
+numpy
+plotly
