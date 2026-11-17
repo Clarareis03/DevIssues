@@ -288,3 +288,119 @@ with tab_integracao:
 
 st.write("")
 st.caption("DevIssues — Projeto desenvolvido para a disciplina de Processamento de Linguagem Natural e Engenharia de Software.")
+
+
+# =========================================================
+# ETAPA 2 — ANÁLISE SEMÂNTICA E TRANSFORMERS
+# =========================================================
+
+from src.integracao_etapa2 import carregar_resultado
+
+st.divider()
+st.header("🧠 3. Análises Avançadas — Segunda Etapa")
+
+st.markdown(
+    "Exploração dos resultados de spaCy avançado, "
+    "embeddings semânticos e Transformers."
+)
+
+tab_spacy2, tab_embeddings2, tab_transformers2 = st.tabs([
+    "🔎 spaCy Avançado",
+    "🧩 Embeddings e Clusters",
+    "🤖 Transformers"
+])
+
+# ---------------------------
+# TRILHA A — SPACY AVANÇADO
+# ---------------------------
+with tab_spacy2:
+    st.subheader("Reconhecimento de Entidades")
+
+    dados_spacy = carregar_resultado("spacy")
+
+    if dados_spacy is not None:
+        st.metric("Issues processadas", len(dados_spacy))
+
+        st.dataframe(
+            dados_spacy[
+                ["repositorio", "numero", "titulo",
+                 "erros", "versoes", "bibliotecas",
+                 "tecnologias"]
+            ],
+            use_container_width=True
+        )
+    else:
+        st.warning("Resultados do spaCy não encontrados.")
+
+
+# ---------------------------
+# TRILHA B — EMBEDDINGS
+# ---------------------------
+with tab_embeddings2:
+    st.subheader("Agrupamento Semântico com KMeans")
+
+    dados_embeddings = carregar_resultado("embeddings")
+
+    if dados_embeddings is not None:
+        st.metric("Issues agrupadas", len(dados_embeddings))
+
+        distribuicao = (
+            dados_embeddings["cluster"]
+            .value_counts()
+            .sort_index()
+        )
+
+        st.bar_chart(distribuicao)
+
+        st.dataframe(
+            dados_embeddings,
+            use_container_width=True
+        )
+
+        caminho_pca = "resultados/clusters_pca.png"
+
+        if Path(caminho_pca).exists():
+            st.image(
+                caminho_pca,
+                caption="Visualização dos clusters com PCA",
+                use_container_width=True
+            )
+    else:
+        st.warning("Resultados de embeddings não encontrados.")
+
+
+# ---------------------------
+# TRILHA C — TRANSFORMERS
+# ---------------------------
+with tab_transformers2:
+    st.subheader("Análise de Sentimento com Transformers")
+
+    dados_transformers = carregar_resultado("transformers")
+
+    if dados_transformers is not None:
+        st.metric("Issues classificadas", len(dados_transformers))
+
+        sentimentos = (
+            dados_transformers["sentimento_transformer"]
+            .value_counts()
+        )
+
+        st.bar_chart(sentimentos)
+
+        st.dataframe(
+            dados_transformers,
+            use_container_width=True
+        )
+
+        caminho_sentimento = (
+            "resultados/sentimento_etapa1_vs_transformer.png"
+        )
+
+        if Path(caminho_sentimento).exists():
+            st.image(
+                caminho_sentimento,
+                caption="Comparação de sentimentos entre etapas",
+                use_container_width=True
+            )
+    else:
+        st.warning("Resultados de Transformers não encontrados.")
