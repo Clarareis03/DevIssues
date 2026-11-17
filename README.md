@@ -1,236 +1,338 @@
-# DevIssues
+<div align="center">
 
-Análise linguística de relatos de problemas em projetos de código aberto: como desenvolvedores descrevem bugs, dívida técnica, pedidos de funcionalidade e urgência nas issues do GitHub.
+# ✦ DevIssues
 
-Projeto desenvolvido para a 1ª etapa da disciplina de Modelagem de Dados não Estruturados, usando **Expressões Regulares** e **spaCy** sobre um corpus real de **280 issues** coletadas pela GitHub REST API.
+### Inteligência em cada issue.
 
-## Sumário
+**Do texto bruto à descoberta semântica — uma plataforma de análise de issues de projetos open source.**
 
-- [O projeto](#o-projeto)
-- [Fonte de dados](#fonte-de-dados)
-- [Categorias identificadas](#categorias-identificadas)
-- [RE e spaCy](#re-e-spacy)
-- [Estrutura do projeto](#estrutura-do-projeto)
-- [Como rodar](#como-rodar)
-- [Resultados](#resultados)
-- [Equipe](#equipe)
-- [Limitações](#limitações)
-- [Diário de bordo](#diário-de-bordo)
-- [Próximas etapas](#próximas-etapas)
+<br>
 
-## O projeto
+![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![Streamlit](https://img.shields.io/badge/Streamlit-Dashboard-6C5CE7?style=for-the-badge&logo=streamlit&logoColor=white)
+![spaCy](https://img.shields.io/badge/spaCy-NLP-09A3D5?style=for-the-badge)
+![Transformers](https://img.shields.io/badge/Transformers-IA-8B5CF6?style=for-the-badge)
+![Status](https://img.shields.io/badge/2ª_etapa-Integrada-20BFA9?style=for-the-badge)
 
-**Pergunta de pesquisa:** quais padrões linguísticos relacionados a erros, urgência, dívida técnica e pedidos de funcionalidade aparecem nos textos de issues abertas em repositórios de código aberto no GitHub?
+<br>
 
-**Objetivo geral:** coletar e processar issues públicas do GitHub, utilizando Expressões Regulares e spaCy, para identificar padrões linguísticos associados a bugs, dívida técnica, pedidos de funcionalidade e urgência do relato.
+**280 issues analisadas** · **4 repositórios** · **2 idiomas** · **3 trilhas de IA**
 
-**Objetivos específicos:**
+[Explorar o projeto](#-sobre-o-projeto) · [Resultados](#-resultados) · [Executar](#-como-executar) · [Diários de bordo](#-diários-de-bordo)
 
-- Coletar issues públicas de repositórios abertos pela API do GitHub e guardá-las em CSV.
-- Identificar vocabulário técnico ligado a erros e falhas.
-- Identificar sinais de dívida técnica (pedidos de refatoração, código "sujo", workarounds).
-- Identificar pedidos de funcionalidade.
-- Identificar marcadores explícitos de urgência no relato.
-- Classificar a polaridade dos textos (positivo, neutro, negativo).
-- Gerar estatísticas e mostrar tudo em uma interface (terminal e dashboard web).
+</div>
 
-A análise é **exclusivamente textual**: nenhum código-fonte dos repositórios analisados é executado ou avaliado, só título + corpo das issues.
+---
 
-## Fonte de dados
+## ✦ Sobre o projeto
 
-Coleta feita pela **GitHub REST API** (`GET /repos/{owner}/{repo}/issues`), sem scraping, usando um token *fine-grained* com acesso somente leitura a repositórios públicos.
+O **DevIssues** investiga como desenvolvedores descrevem problemas, solicitações de funcionalidades, dívida técnica e urgência nas *issues* de projetos de código aberto no GitHub.
 
-| Repositório | Idioma predominante |
-| --- | --- |
-| `psf/requests` | Inglês |
-| `pandas-dev/pandas` | Inglês |
-| `microsoft/vscode` | Inglês |
-| `filipedeschamps/tabnews.com.br` | Português |
+Na primeira etapa, o projeto combinou **GitHub REST API, expressões regulares e spaCy** para coletar, processar e categorizar os relatos. Na segunda etapa, ampliou a análise com **pipelines linguísticos avançados, embeddings semânticos, clusterização e Transformers**.
 
-**Corpus final: 280 issues** (`dados/issues.csv`), com **70 issues de cada um dos 4 repositórios**: 210 em inglês e 70 em português — um corpus bilíngue processado com dois modelos spaCy diferentes (`en_core_web_sm` e `pt_core_news_sm`), escolhidos automaticamente por issue a partir de uma detecção simples de idioma.
+> **Pergunta norteadora:** quais padrões linguísticos e semânticos podem ser identificados em relatos de problemas de software e como diferentes abordagens de NLP se comparam na análise dessas issues?
 
-## Categorias identificadas
+A aplicação utiliza os **textos das issues**, principalmente título e descrição. Ela **não analisa nem executa o código-fonte** dos repositórios estudados.
 
-| Categoria | Como é identificada |
-| --- | --- |
-| **Bug / erro** | Presença de nome de exceção (Regex), labels do GitHub (`bug`, `defect`, `erro`) ou lemas do spaCy (`bug`, `error`, `crash`, `fix`) |
-| **Dívida técnica** | Labels (`debt`, `refactor`, `cleanup`, `deprecation`) ou lemas (`refactor`, `deprecated`, `cleanup`) |
-| **Pedido de funcionalidade** | Labels (`enhancement`, `feature`, `request`) ou lemas (`feature`, `add`, `support`, `implement`) |
-| **Urgência** | Termos explícitos via Regex (`urgent`, `critical`, `asap`, `blocking`, `blocker`, `high priority`) ou labels (`urgent`, `critical`, `p0`, `p1`, `blocker`) |
-| **Sentimento** | Positivo, Neutro ou Negativo, a partir da contagem de lemas de satisfação vs. frustração/falha extraídos pelo spaCy |
+## ◈ O que a plataforma entrega
 
-A comparação de labels e termos é feita por **token exato** (não por substring), para evitar falsos positivos como `"bug"` sendo encontrado dentro de `"debug"`/`"debugging"`.
+| Experiência | O que é possível explorar |
+| :--- | :--- |
+| **Visão geral** | Indicadores de bugs, funcionalidades, dívida técnica, urgência e sentimentos |
+| **spaCy avançado** | Entidades de erros, versões, bibliotecas e tecnologias; comparação com Regex |
+| **Embeddings** | Busca semântica em linguagem natural, quatro clusters e projeção PCA interativa |
+| **Transformers** | Sentimento multilíngue, classificação zero-shot e comparação com a etapa inicial |
 
-Uma mesma issue pode pertencer a mais de uma categoria ao mesmo tempo — os números das categorias não somam o total.
+O dashboard é construído com **Streamlit e Plotly**, com navegação lateral e visualizações interativas. Os resultados pré-processados ficam disponíveis nos arquivos da pasta [`resultados/`](resultados/).
 
-## RE e spaCy
+---
 
-### Expressões Regulares (`src/regex.py`)
+## ◈ Dataset
 
-Aplicadas sobre título + corpo de cada issue para capturar:
+Os dados foram coletados pela **GitHub REST API** e armazenados em [`dados/issues.csv`](dados/issues.csv).
 
-- **Versões de software** (ex.: `v3.12.1`, `2.34.2`), com filtros para descartar IPv4, seções de RFC, percentuais, métricas e scores que teriam a mesma estrutura de uma versão;
-- **Referências a issues/PRs** (ex.: `#1234`);
-- **Erros e exceções** (ex.: `TypeError`, `ValueError`);
-- **Caminhos de arquivos** (URLs são mascaradas antes, para não se confundirem com caminhos);
-- **URLs**;
-- **Termos explícitos de urgência** (`urgent`, `critical`, `asap`, `blocking`, `blocked`, `high priority`, `release blocker`, `blocker`).
+| Repositório | Issues | Idioma predominante |
+| :--- | ---: | :--- |
+| [`psf/requests`](https://github.com/psf/requests) | 70 | Inglês |
+| [`pandas-dev/pandas`](https://github.com/pandas-dev/pandas) | 70 | Inglês |
+| [`microsoft/vscode`](https://github.com/microsoft/vscode) | 70 | Inglês |
+| [`filipedeschamps/tabnews.com.br`](https://github.com/filipedeschamps/tabnews.com.br) | 70 | Português |
+| **Total** | **280** | **210 EN · 70 PT** |
 
-### spaCy (`src/nlp.py`)
+A composição bilíngue orientou a escolha de modelos específicos por idioma na análise spaCy e de modelos multilíngues nas trilhas de embeddings e Transformers.
 
-Para cada issue, na língua detectada:
+---
 
-1. identificação do idioma;
-2. tokenização;
-3. lematização;
-4. remoção de stopwords;
-5. identificação de classes gramaticais (POS);
-6. extração de entidades nomeadas (NER).
+## ◈ Arquitetura de análise
 
-## Estrutura do projeto
-
-```
-DevIssues/
-│
-├── main.py                 # Ponto de entrada (menu no terminal)
-├── app.py                  # Dashboard web (Streamlit)
-│
-├── src/
-│   ├── coleta.py            # Coleta via GitHub API
-│   ├── regex.py              # Padrões de Expressões Regulares
-│   ├── nlp.py                 # Processamento spaCy
-│   ├── analise.py             # Classificação, sentimento e consolidação
-│   └── interface.py           # Menu interativo do terminal
-│
-├── dados/
-│   └── issues.csv           # 280 issues coletadas
-│
-├── resultados/
-│   ├── regex_results.csv     # Saída bruta do componente Regex
-│   ├── nlp_results.csv        # Saída bruta do componente spaCy
-│   └── relatorio_final.csv    # Base consolidada e classificada
-│
-├── docs/
-│   ├── diariodebordo_coleta.md
-│   ├── diariodebordo_regex_nlp.md
-│   └── diariodebordo_analise_interface.md
-│
-├── requirements.txt
-└── README.md
+```mermaid
+flowchart TD
+    A[GitHub REST API] --> B[Corpus de 280 issues]
+    B --> C[Etapa 1: Regex + spaCy]
+    C --> D[Categorias e sentimento lexical]
+    B --> E[Trilha A: spaCy avançado]
+    B --> F[Trilha B: Embeddings]
+    B --> G[Trilha C: Transformers]
+    E --> H[EntityRuler e comparação com Regex]
+    F --> I[Similaridade + KMeans + PCA]
+    G --> J[Sentimento + zero-shot]
+    D --> K[Dashboard Streamlit]
+    H --> K
+    I --> K
+    J --> K
+    classDef primary fill:#6C5CE7,color:#fff,stroke:#A29BFE,stroke-width:2px;
+    classDef secondary fill:#1F2239,color:#fff,stroke:#A29BFE;
+    class A,B,K primary;
+    class C,D,E,F,G,H,I,J secondary;
 ```
 
-## Como rodar
+### 01 · Fundamentos: Regex + spaCy
 
-### 1. Pré-requisitos
+O pipeline inicial identifica referências a issues, URLs, arquivos, versões de software e nomes de exceções. O spaCy realiza tokenização, lematização, filtragem de *stopwords*, análise gramatical e reconhecimento de entidades. Essas informações são combinadas com as *labels* do GitHub para marcar **bugs, dívida técnica, pedidos de funcionalidade e urgência**, além de produzir uma classificação lexical de sentimento.
+
+**Módulos:** [`src/regex.py`](src/regex.py), [`src/nlp.py`](src/nlp.py) e [`src/analise.py`](src/analise.py).
+
+### 02 · Trilha A: spaCy avançado
+
+A segunda etapa estende a análise linguística com **modelos médios do spaCy**, `EntityRuler`, ajuste de tokenização e componentes personalizados. O sistema extrai menções a erros, versões, bibliotecas e tecnologias; também compara essas extrações com o Regex e calcula vizinhanças semânticas **dentro de cada idioma**.
+
+**Módulo:** [`src/pipeline_spacy.py`](src/pipeline_spacy.py).  
+**Saídas:** `spacy_avancado.csv` e `spacy_vs_regex.csv`.
+
+### 03 · Trilha B: embeddings e descoberta semântica
+
+O modelo multilíngue **`paraphrase-multilingual-MiniLM-L12-v2`** transforma cada issue em um vetor de **384 dimensões**. A partir dessas representações, são realizadas:
+
+- **Busca semântica:** comparação por similaridade do cosseno para recuperar as cinco issues mais próximas de uma consulta.
+- **Agrupamento:** **KMeans com K = 4**, para explorar padrões temáticos.
+- **Visualização:** **PCA** para projetar os vetores em duas dimensões.
+- **Avaliação:** Silhouette Score, Davies-Bouldin, Calinski-Harabasz e leitura qualitativa de amostras.
+
+**Módulo:** [`src/embeddings.py`](src/embeddings.py).  
+**Saídas:** `embeddings.npy`, `embeddings_resultados.csv` e `clusters_pca.png`.
+
+<div align="center">
+  <img src="resultados/clusters_pca.png" alt="Projeção PCA dos quatro clusters de issues" width="82%" />
+  <br><sub>Projeção exploratória dos embeddings: a redução para 2D não preserva toda a informação do espaço original.</sub>
+</div>
+
+### 04 · Trilha C: Transformers
+
+O pipeline usa o modelo **`cardiffnlp/twitter-xlm-roberta-base-sentiment`** para classificar sentimento em **negativo, neutro e positivo**, e **`MoritzLaurer/mDeBERTa-v3-base-xnli-multilingual-nli-2mil7`** para classificação *zero-shot* dos tipos de issue: bug, dívida técnica e pedido de funcionalidade.
+
+As previsões são comparadas com as da etapa inicial. O código também inclui uma avaliação contra **rótulos humanos**, com acurácia e F1, mas essa avaliação depende da conclusão da rotulagem manual.
+
+**Módulo:** [`src/transformers_sent.py`](src/transformers_sent.py).  
+**Saídas:** `transformers_resultados.csv`, `transformers_vs_etapa1.csv` e gráficos de comparação.
+
+<div align="center">
+  <img src="resultados/sentimento_etapa1_vs_transformer.png" alt="Comparação da distribuição de sentimentos entre a etapa 1 e Transformers" width="76%" />
+  <br><sub>Comparação de classificações automáticas; concordância entre métodos não equivale a acurácia.</sub>
+</div>
+
+---
+
+## ◈ Resultados
+
+### Panorama do corpus
+
+| Indicador | Resultado |
+| :--- | ---: |
+| Issues analisadas | **280** |
+| Repositórios | **4** |
+| Bugs/erros identificados na etapa 1 | **147** |
+| Pedidos de funcionalidade | **117** |
+| Dívida técnica | **35** |
+| Urgência explícita | **6 (2,1%)** |
+
+Uma issue pode pertencer a mais de uma categoria, portanto as contagens **não são mutuamente exclusivas**.
+
+### Agrupamento semântico
+
+| Cluster | Issues | Leitura temática exploratória |
+| :--- | ---: | :--- |
+| 0 | 102 | Funcionalidades, configurações e integrações |
+| 1 | 52 | Manipulação e conversão de dados no Pandas |
+| 2 | 59 | Evolução de funcionalidades e experiência de uso |
+| 3 | 67 | Correções, confiabilidade e compatibilidade |
+
+Para **K = 4**, a análise registrou **Silhouette = 0,0886**, **Davies-Bouldin = 3,5811** e **Calinski-Harabasz = 18,6928**. As métricas indicam separação limitada entre grupos; os temas acima são interpretações qualitativas, não rótulos produzidos automaticamente pelo KMeans.
+
+Além disso, a associação entre **cluster e idioma (V de Cramér = 0,707)** e entre **cluster e repositório (V = 0,695)** recomenda cautela ao atribuir os agrupamentos apenas à semântica dos textos.
+
+### Comparações entre métodos
+
+A Trilha A registrou concordância na detecção de erros entre Regex e spaCy em **42 issues com erros** e **238 sem erros** após ajustes na tokenização. A comparação de versões ainda apresenta divergências associadas às regras e ao contexto utilizado por cada método.
+
+Na Trilha C, as diferenças de sentimentos entre métodos são exploradas em [`resultados/transformers_vs_etapa1.csv`](resultados/transformers_vs_etapa1.csv). **A avaliação de desempenho contra a rotulagem humana ainda não está concluída.**
+
+---
+
+## ◈ Como executar
+
+### 1 · Clonar o projeto e preparar o ambiente
 
 ```bash
-pip install -r requirements.txt
+git clone https://github.com/Clarareis03/DevIssues.git
+cd DevIssues
+python -m venv .venv
+```
+
+Ative o ambiente virtual:
+
+**Windows (PowerShell)**
+
+```powershell
+.\.venv\Scripts\Activate.ps1
+```
+
+**Windows (Git Bash)**
+
+```bash
+source .venv/Scripts/activate
+```
+
+**Linux / macOS**
+
+```bash
+source .venv/bin/activate
+```
+
+Instale as dependências:
+
+```bash
+python -m pip install -r requirements.txt
+```
+
+> O primeiro carregamento dos modelos Transformers ou Sentence Transformers pode baixar arquivos adicionais e exigir memória e conexão com a internet. Para apenas explorar os resultados salvos, não é necessário reprocessar os modelos.
+
+### 2 · Abrir o dashboard
+
+```bash
+python -m streamlit run app.py --server.port 8502
+```
+
+Acesse **http://localhost:8502**. A porta `8502` é usada aqui para evitar conflito com outra aplicação local; você pode alterá-la conforme necessário.
+
+### 3 · Reproduzir os pipelines (opcional)
+
+Baixe os modelos spaCy adequados antes de reprocessar:
+
+```bash
 python -m spacy download en_core_web_sm
 python -m spacy download pt_core_news_sm
+python -m spacy download en_core_web_md
+python -m spacy download pt_core_news_md
 ```
 
-### 2. Configurar o token do GitHub (só necessário para coletar issues novas)
+| Objetivo | Comando |
+| :--- | :--- |
+| Análise inicial | `python -m src.analise` |
+| spaCy avançado | `python -m src.pipeline_spacy` |
+| Embeddings e KMeans | `python -m src.embeddings` |
+| Transformers (sentimento + zero-shot) | `python -m src.transformers_sent` |
+| Menu de terminal | `python main.py` |
 
-Crie um [Personal Access Token *fine-grained*](https://github.com/settings/personal-access-tokens/new) com **Repository access: Public Repositories (read-only)** e salve num arquivo `.env` na raiz do projeto (não versionado):
+**Avaliação manual da Trilha C:**
 
+```bash
+python -m src.transformers_sent --amostra
+# Preencha os campos de rotulagem em resultados/amostra_rotulagem_sentimento.csv
+python -m src.transformers_sent --avaliar
 ```
+
+O comando `--avaliar` calcula métricas apenas para os rótulos válidos preenchidos. O arquivo `resultados/avaliacao_transformers.csv` será gerado após a avaliação.
+
+### Coletar novas issues (opcional)
+
+O corpus atual já acompanha o repositório. Para executar nova coleta, configure um token GitHub apropriado em `.env`, sem versioná-lo:
+
+```dotenv
 GITHUB_TOKEN=seu_token_aqui
 ```
 
-### 3. Rodar a coleta (opcional — o corpus de 280 issues já está em `dados/issues.csv`)
+Em seguida:
 
 ```bash
 python -m src.coleta --repos psf/requests,pandas-dev/pandas,microsoft/vscode,filipedeschamps/tabnews.com.br --max-por-repo 70
 ```
 
-### 4. Rodar a análise completa
+---
 
-```bash
-python -m src.analise
+## ◈ Organização do repositório
+
+```text
+DevIssues/
+├── app.py                     # Dashboard Streamlit
+├── main.py                    # Interface de terminal
+├── requirements.txt           # Dependências
+├── .streamlit/config.toml     # Configuração de aparência
+├── dados/
+│   └── issues.csv             # Corpus original
+├── src/
+│   ├── coleta.py              # API do GitHub
+│   ├── regex.py               # Extração por padrões
+│   ├── nlp.py                 # Processamento textual
+│   ├── analise.py             # Consolidação e categorização
+│   ├── interface.py           # Menu de terminal
+│   ├── pipeline_spacy.py      # Trilha A
+│   ├── embeddings.py          # Trilha B
+│   ├── transformers_sent.py   # Trilha C
+│   └── integracao_etapa2.py   # Leitura dos resultados no dashboard
+├── resultados/                # CSVs, gráficos e vetores gerados
+└── docs/                      # Planejamento e diários de bordo
 ```
 
-Gera `resultados/relatorio_final.csv` e imprime um resumo com o total de issues, bugs, dívida técnica e urgência.
+---
 
-### 5. Usar a interface
+## ◈ Equipe
 
-Menu no terminal:
+| Integrante | Etapa inicial | Segunda etapa |
+| :--- | :--- | :--- |
+| **Ayra Souza** | Coleta via API do GitHub | Pipeline spaCy avançado (Trilha A) |
+| **Ana Beatriz Sena** | Expressões regulares e spaCy | Embeddings e clusterização (Trilha B) |
+| **Maria Clara Reis** | Análise, interface e dashboard | Integração, visualização e dashboard da etapa 2 |
 
-```bash
-python main.py
-```
+O módulo de Transformers (Trilha C) integra o trabalho de comparação e avaliação da segunda etapa; a divisão individual dessa implementação não é especificada aqui.
 
-Dashboard web:
+## ◈ Diários de bordo
 
-```bash
-streamlit run app.py
-```
+Registros de desenvolvimento, problemas encontrados, decisões técnicas e soluções:
 
-## Resultados
+**Etapa 1**
 
-Números reais obtidos ao rodar a análise sobre o corpus completo de 280 issues (ver `resultados/relatorio_final.csv`, `resultados/regex_results.csv` e `resultados/nlp_results.csv` para o detalhamento issue a issue).
+- [Coleta de dados](docs/diariodebordo_coleta.md)
+- [Regex e NLP](docs/diariodebordo_regex_nlp.md)
+- [Análise e interface](docs/diariodebordo_analise_interface.md)
 
-**Classificação (`src/analise.py`):**
+**Etapa 2**
 
-| Categoria | Quantidade |
-| --- | --- |
-| Total de issues analisadas | 280 |
-| Bugs / erros | 147 |
-| Dívida técnica | 35 |
-| Urgência | 6 (2,1%) |
+- [spaCy avançado — Ayra](docs/diariodebordo_semantica.md)
+- [Embeddings — Ana Beatriz](docs/diaridodebordo_embeddings.md)
+- [Integração e dashboard — Maria Clara](docs/diariodebordo_dashboard_etapa2.md)
 
-**Padrões Regex (`src/regex.py`), % das 280 issues em que o padrão foi encontrado:**
+> O último link requer que `docs/diariodebordo_dashboard_etapa2.md` também seja enviado ao repositório.
 
-| Padrão | Issues | % |
-| --- | --- | --- |
-| Versões | 106 | 37,9% |
-| URLs | 154 | 55,0% |
-| Caminhos de arquivos | 48 | 17,1% |
-| Referências (#123) | 45 | 16,1% |
-| Erros/exceções | 42 | 15,0% |
-| Urgência | 6 | 2,1% |
+---
 
-**Processamento spaCy (`src/nlp.py`):**
+## ◈ Limitações e cuidados de interpretação
 
-- 210 issues em inglês, 70 em português;
-- 101.509 tokens processados;
-- 5.705 entidades nomeadas extraídas.
+- A base tem **280 issues de apenas quatro repositórios** e não representa todo o ecossistema open source.
+- A detecção de idioma da primeira etapa utiliza heurísticas; classificações ambíguas podem estar incorretas.
+- Palavras como *bug*, *critical* ou *urgent* são **indicadores textuais**, não confirmação da gravidade real do problema.
+- Os clusters são exploratórios: a influência do idioma e do repositório pode afetar os agrupamentos.
+- A projeção PCA em duas dimensões perde informação em relação aos vetores originais.
+- Scores de similaridade **não são probabilidades de relevância ou de correção**.
+- Classificações de sentimento e *zero-shot* estão sujeitas a erros e vieses dos modelos; concordância entre métodos não substitui validação humana.
 
-> A contagem de urgência foi recalculada durante a integração da base completa (o valor de 4 issues / 1,4%, que aparece em versões anteriores do diário de bordo, refletia um corpus ainda incompleto). O número correto, confirmado sobre as 280 issues, é **6 issues (2,1%)**.
+---
 
-Para categorias e recortes adicionais (feature request, distribuição de sentimento, top erros e versões mais citados), consulte diretamente `resultados/relatorio_final.csv` ou o dashboard em `app.py`.
+<div align="center">
 
-## Equipe
+### ✦ DevIssues
 
-| Responsabilidade | Integrante | Arquivos |
-| --- | --- | --- |
-| Coleta de dados (GitHub API) | Ayra Souza | `src/coleta.py`, `dados/issues.csv` |
-| Regex e spaCy | Ana Beatriz | `src/regex.py`, `src/nlp.py` |
-| Análise, interface e dashboard | Maria Clara Reis | `src/analise.py`, `src/interface.py`, `app.py`, `main.py` |
+**Entender o que as issues dizem. Descobrir como elas se conectam.**
 
-## Limitações
+<sub>Projeto acadêmico de análise de dados não estruturados · Python · NLP · Inteligência Artificial</sub>
 
-1. O projeto analisa **textos de issues**, não a qualidade real do código nem o desempenho dos desenvolvedores.
-2. A análise de sentimento é automática e baseada em lista de lemas — pode errar, especialmente com sarcasmo ou gírias técnicas.
-3. Encontrar termos como "urgent" ou "critical" não significa que o problema era, de fato, grave — pode ser só o jeito de quem escreveu.
-4. A amostra depende dos quatro repositórios escolhidos, que têm culturas de comunicação diferentes (inclusive volume relevante de spam/conteúdo gerado por IA em alguns deles, como no `psf/requests`).
-5. Não devemos generalizar os resultados para todo o ecossistema open source.
-6. A detecção de idioma usa uma heurística simples baseada em listas de palavras-chave; casos ambíguos são classificados por padrão como inglês.
-7. A 1ª etapa é exclusivamente textual.
-
-## Diário de bordo
-
-Cada integrante documentou problemas encontrados e soluções em tempo real:
-
-- [`docs/diariodebordo_coleta.md`](docs/diariodebordo_coleta.md) — configuração de token, troca de repositório (`frontendbr/open-source` → `filipedeschamps/tabnews.com.br`), consolidação do corpus bilíngue.
-- [`docs/diariodebordo_regex_nlp.md`](docs/diariodebordo_regex_nlp.md) — refinamento dos padrões Regex (falsos positivos de versão, sobreposição caminho/URL) e configuração do spaCy para os dois idiomas.
-- [`docs/diariodebordo_analise_interface.md`](docs/diariodebordo_analise_interface.md) — normalização de lemas para o sentimento e migração da interface de terminal para o dashboard em Streamlit.
-
-## Próximas etapas
-
-O tema é o mesmo nas três etapas da disciplina; muda o tipo de dado analisado:
-
-```
-1ª ETAPA — TEXTO       → RE + spaCy + GitHub API      (concluída)
-2ª ETAPA — ÁUDIO        → módulos Python para áudio
-3ª ETAPA — VÍDEO         → módulos Python para vídeo
-```
+</div>
